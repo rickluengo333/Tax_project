@@ -1,7 +1,11 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Upload, Activity, MessageSquare, FolderOpen, FileText, Lightbulb, Settings, LogOut, Menu } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
   const menuItems = [
     { path: '/tax-intake', label: 'Tax Intake', icon: Upload },
     { path: '/status-tracker', label: 'Status Tracker', icon: Activity },
@@ -10,6 +14,11 @@ export default function Sidebar() {
     { path: '/tax-return', label: 'Tax Return', icon: FileText },
     { path: '/insights', label: 'Insights', icon: Lightbulb },
   ];
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/login');
+  };
 
   return (
     <div className="w-[200px] bg-[#0a0a0a] h-screen flex flex-col border-r border-gray-800">
@@ -51,11 +60,23 @@ export default function Sidebar() {
       </nav>
 
       <div className="border-t border-gray-800">
-        <button className="flex items-center gap-3 px-4 py-3 text-sm text-gray-400 hover:text-white hover:bg-gray-900 w-full transition-colors">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-3 text-sm transition-colors w-full ${
+              isActive
+                ? 'bg-[#b89968] text-white'
+                : 'text-gray-400 hover:text-white hover:bg-gray-900'
+            }`
+          }
+        >
           <Settings size={18} />
           <span>Settings</span>
-        </button>
-        <button className="flex items-center gap-3 px-4 py-3 text-sm text-gray-400 hover:text-white hover:bg-gray-900 w-full transition-colors">
+        </NavLink>
+        <button
+          onClick={handleSignOut}
+          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-400 hover:text-white hover:bg-gray-900 w-full transition-colors"
+        >
           <LogOut size={18} />
           <span>Sign Out</span>
         </button>
