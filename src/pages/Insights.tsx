@@ -27,6 +27,7 @@ interface Insight {
 
 export default function Insights() {
   const [expandedInsight, setExpandedInsight] = useState<string | null>('insight-2');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'Tax Opportunity' | 'Tax Planning' | 'Compliance' | 'Risk & Monitoring'>('all');
 
   const insights: Insight[] = [
     {
@@ -144,31 +145,72 @@ export default function Insights() {
       </div>
 
       <div className="flex items-center gap-3 mb-6 flex-wrap">
-        <button className="px-4 py-2 bg-[#b89968] text-white rounded-lg text-sm font-medium hover:bg-[#a68959] transition-colors">
+        <button
+          onClick={() => setActiveFilter('all')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            activeFilter === 'all'
+              ? 'bg-[#b89968] text-white'
+              : 'bg-transparent border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+          }`}
+        >
           All
         </button>
-        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
+        <button
+          onClick={() => setActiveFilter('Tax Opportunity')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            activeFilter === 'Tax Opportunity'
+              ? 'bg-[#b89968] text-white'
+              : 'bg-transparent border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+          }`}
+        >
           Tax Opportunities
         </button>
-        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
+        <button
+          onClick={() => setActiveFilter('Tax Planning')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            activeFilter === 'Tax Planning'
+              ? 'bg-[#b89968] text-white'
+              : 'bg-transparent border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+          }`}
+        >
           Tax Planning
         </button>
-        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
+        <button
+          onClick={() => setActiveFilter('Compliance')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            activeFilter === 'Compliance'
+              ? 'bg-[#b89968] text-white'
+              : 'bg-transparent border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+          }`}
+        >
           Compliance
         </button>
-        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
+        <button
+          onClick={() => setActiveFilter('Risk & Monitoring')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            activeFilter === 'Risk & Monitoring'
+              ? 'bg-[#b89968] text-white'
+              : 'bg-transparent border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+          }`}
+        >
           Risk & Monitoring
         </button>
-        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
+        <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors ml-auto">
           Sort by:
         </button>
         <button className="px-4 py-2 bg-transparent border border-gray-700 text-gray-400 rounded-lg text-sm hover:text-white hover:border-gray-600 transition-colors">
-          Collapse All
+          Expand All
         </button>
       </div>
 
       <div className="space-y-4">
-        {insights.map((insight) => {
+        {insights
+          .filter(
+            (insight) =>
+              activeFilter === 'all' ||
+              insight.category === activeFilter
+          )
+          .map((insight) => {
           const isExpanded = expandedInsight === insight.id;
 
           return (
